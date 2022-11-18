@@ -2,12 +2,12 @@ import argparse, os
 from urllib.parse import quote
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-n", "--name", dest="name", help="Name", type=str)
-parser.add_argument("-s", "--style", dest="style", help="Style", type=str)
+parser.add_argument("-n", "--name", dest="name", help="Name", type=str, default="")
+parser.add_argument("-s", "--style", dest="style", help="Style", type=str, default="")
 parser.add_argument("-d", "--directory", dest="directory", help="Directory", type=str, default="imagerepo")
 args = parser.parse_args()
 
-repo = f"Plex Meta Manager People - {args.name} ({args.style})"
+repo = f"Plex Meta Manager People - {args.name}{f' ({args.style})' if args.style else ''}"
 
 total_data = []
 letters = [l for l in os.listdir(args.directory) if l not in [".git", ".github", ".idea", "README.md"]]
