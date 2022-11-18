@@ -19,6 +19,12 @@ lib64/
 parts/
 sdist/
 var/
+.idea
+bw
+rainier
+signature
+transparent
+original
 wheels/
 pip-wheel-metadata/
 share/python-wheels/
