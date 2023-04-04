@@ -6,6 +6,6 @@ This git contains the File that generates the Readme file for these picture styl
 - [Black & White (bw)](https://github.com/meisnate12/Plex-Meta-Manager-People-bw)
 - [Rainier (rainier)](https://github.com/meisnate12/Plex-Meta-Manager-People-rainier)
 - [Signature (signature)](https://github.com/meisnate12/Plex-Meta-Manager-People-signature)
-- [DIIVOY (diivoy)](https://github.com/meisnate12/Plex-Meta-Manager-People-diiivoy)
-- [DIIVOY Color (diivoycolor)](https://github.com/meisnate12/Plex-Meta-Manager-People-diiivoycolor)
+- [DIIVOY (diiivoy)](https://github.com/meisnate12/Plex-Meta-Manager-People-diiivoy)
+- [DIIVOY Color (diiivoycolor)](https://github.com/meisnate12/Plex-Meta-Manager-People-diiivoycolor)
 - [Transparent (transparent)](https://github.com/meisnate12/Plex-Meta-Manager-People-transparent)
