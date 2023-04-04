@@ -7,7 +7,12 @@ parser.add_argument("-s", "--style", dest="style", help="Style", type=str, defau
 parser.add_argument("-d", "--directory", dest="directory", help="Directory", type=str, default="")
 args = parser.parse_args()
 
-names = {"bw": "Black & White"}
+names = {
+    "bw": "Black & White",
+    "diiivoy": "DIIIVOY",
+    "diiivoycolor": "DIIIVOY Color"
+}
+
 
 if args.name:
     name = args.name
