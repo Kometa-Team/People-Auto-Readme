@@ -14,7 +14,6 @@ names = {
     "diiivoycolor": "DIIIVOY Color"
 }
 
-
 if args.name:
     name = args.name
 elif args.style:
