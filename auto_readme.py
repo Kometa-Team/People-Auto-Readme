@@ -28,7 +28,7 @@ elif args.style:
 else:
     directory = "original"
 
-repo = f"Kometa People - {name}{f' ({args.style})' if args.style else ''}"
+repo = f"Kometa People Images - {name}{f' ({args.style})' if args.style else ''}"
 
 total_data = []
 letters = [lt for lt in os.listdir(directory) if lt not in [".git", ".github", ".idea", "README.md"]]
@@ -40,7 +40,7 @@ for letter in letters:
     if not os.path.exists(images_folder):
         print(f"Images Folder: {images_folder} does not exist")
         continue
-    base_letter_url = f"https://raw.githubusercontent.com/Kometa-Team/People{f'-{args.style}' if args.style else ''}/master/{letter}/Images/"
+    base_letter_url = f"https://raw.githubusercontent.com/Kometa-Team/People-Images{f'-{args.style}' if args.style else ''}/master/{letter}/Images/"
     files = os.listdir(images_folder)
     files.sort()
     data = [f"\n* [{os.path.splitext(f)[0]}]({base_letter_url}{quote(str(f))})" for f in files]
