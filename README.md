@@ -1,4 +1,4 @@
-# Plex Meta Manager People Auto Readme
+# Kometa People Auto Readme
 
 This git contains the File that generates the Readme file for these picture styles:
 
