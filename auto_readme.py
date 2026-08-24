@@ -6,6 +6,11 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-n", "--name", dest="name", help="Name", type=str, default="")
 parser.add_argument("-s", "--style", dest="style", help="Style", type=str, default="")
 parser.add_argument("-d", "--directory", dest="directory", help="Directory", type=str, default="")
+grid_group = parser.add_mutually_exclusive_group()
+grid_group.add_argument("--grid", dest="grid", action="store_true", default=False,
+                        help="Generate and link per-letter grid.jpg preview images")
+grid_group.add_argument("--no-grid", dest="grid", action="store_false",
+                        help="Do not generate or link per-letter grid.jpg preview images (default)")
 args = parser.parse_args()
 
 names = {
@@ -51,52 +56,55 @@ for letter in letters:
         total_data.append("\n</details>")
         total += len(files)
 
-        num_columns = int(math.sqrt(len(files)))
-        text_color = (255, 255, 255)
-        thumb_size = (200, 200)
-        show_text = True
-        num_rows = len(files) // num_columns + (len(files) % num_columns > 0)
-        grid_size = (num_columns * thumb_size[0], num_rows * (thumb_size[1] + 20) + 20)
-        grid_image = Image.new('RGB', grid_size, (0, 0, 0))
-        draw = ImageDraw.Draw(grid_image)
-        font = ImageFont.truetype('arial.ttf', size=12)
+        if args.grid:
+            num_columns = int(math.sqrt(len(files)))
+            text_color = (255, 255, 255)
+            thumb_size = (200, 200)
+            num_rows = len(files) // num_columns + (len(files) % num_columns > 0)
+            grid_size = (num_columns * thumb_size[0], num_rows * (thumb_size[1] + 20) + 20)
+            grid_image = Image.new('RGB', grid_size, (0, 0, 0))
+            draw = ImageDraw.Draw(grid_image)
+            font = ImageFont.truetype('arial.ttf', size=12)
 
-        for i, file in enumerate(files):
-            image_path = os.path.join(images_folder, file)
-            image = Image.open(image_path)
-            image.thumbnail(thumb_size, Image.LANCZOS)
+            for i, file in enumerate(files):
+                image_path = os.path.join(images_folder, file)
+                image = Image.open(image_path)
+                image.thumbnail(thumb_size, Image.LANCZOS)
 
-            col_index = i % num_columns
-            row_index = i // num_columns
-            x = col_index * thumb_size[0]
-            y = row_index * (thumb_size[1] + 20) + 20
-            x_offset = (thumb_size[0] - image.size[0]) // 2
-            y_offset = (thumb_size[1] - image.size[1]) // 2
-            filename = os.path.splitext(file)[0]
-            text_bbox = font.getbbox(filename)
-            text_width = text_bbox[2] - text_bbox[0]
-            text_height = text_bbox[3] - text_bbox[1]
-            text_x = x + (thumb_size[0] - text_width - 20) // 2 + 10
-            text_y = y + thumb_size[1] + 5
-            box_width = thumb_size[0] - 20
-            box_height = text_height
+                col_index = i % num_columns
+                row_index = i // num_columns
+                x = col_index * thumb_size[0]
+                y = row_index * (thumb_size[1] + 20) + 20
+                x_offset = (thumb_size[0] - image.size[0]) // 2
+                y_offset = (thumb_size[1] - image.size[1]) // 2
+                filename = os.path.splitext(file)[0]
+                text_bbox = font.getbbox(filename)
+                text_width = text_bbox[2] - text_bbox[0]
+                text_height = text_bbox[3] - text_bbox[1]
+                text_x = x + (thumb_size[0] - text_width - 20) // 2 + 10
+                text_y = y + thumb_size[1] + 5
+                box_width = thumb_size[0] - 20
+                box_height = text_height
 
-            grid_image.paste(image, (x + x_offset, y + y_offset))
-            draw.rectangle((x + 10, text_y - 2, x + 10 + box_width, text_y + box_height + 2), fill=(0, 0, 0))
-            draw.text((text_x, text_y), filename, font=font, fill=text_color)
+                grid_image.paste(image, (x + x_offset, y + y_offset))
+                draw.rectangle((x + 10, text_y - 2, x + 10 + box_width, text_y + box_height + 2), fill=(0, 0, 0))
+                draw.text((text_x, text_y), filename, font=font, fill=text_color)
 
-        for i in range(num_columns + 1):
-            x = i * thumb_size[0]
-            draw.line((x, 0, x, grid_size[1]), fill=(0, 0, 0))
+            for i in range(num_columns + 1):
+                x = i * thumb_size[0]
+                draw.line((x, 0, x, grid_size[1]), fill=(0, 0, 0))
 
-        for i in range(num_rows + 1):
-            y = i * (thumb_size[1] + 20) + 20
-            draw.line((0, y, grid_size[0], y), fill=(0, 0, 0))
+            for i in range(num_rows + 1):
+                y = i * (thumb_size[1] + 20) + 20
+                draw.line((0, y, grid_size[0], y), fill=(0, 0, 0))
 
-        grid_image.save(os.path.join(letter_folder, "grid.jpg"))
+            grid_image.save(os.path.join(letter_folder, "grid.jpg"))
 
     with open(os.path.join(directory, letter, "README.md"), "w", encoding="utf-8") as f:
-        f.writelines([f"# {repo} - {letter} ({len(files)} Images)", "\n", "![Grid](grid.jpg)", "\n"] + data)
+        readme_lines = [f"# {repo} - {letter} ({len(files)} Images)", "\n"]
+        if args.grid and files:
+            readme_lines.extend(["![Grid](grid.jpg)", "\n"])
+        f.writelines(readme_lines + data)
 
 with open(os.path.join(directory, "README.md"), "w", encoding="utf-8") as f:
     f.writelines([f"# {repo} ({total} Images)", "\n"] + total_data)
